@@ -36,6 +36,11 @@ public class Creature
 
     public void Loot(WorldObject worldObject)
     {
+        ArgumentNullException.ThrowIfNull(worldObject);
 
+        if (!worldObject.IsLootable)
+        {
+            throw new InvalidOperationException($"WorldObject '{worldObject.Name}' cannot be looted");
+        }
     }
 }
