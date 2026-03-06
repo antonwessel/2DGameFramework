@@ -12,7 +12,6 @@ public class World
     {
         MaxX = maxX;
         MaxY = maxY;
-
         Creatures = [];
         WorldObjects = [];
     }

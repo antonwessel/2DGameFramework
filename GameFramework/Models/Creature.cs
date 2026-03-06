@@ -13,19 +13,25 @@ public class Creature
         Name = name;
         HitPoints = hitPoints;
         Position = position;
-
         AttackItems = [];
         DefenceItems = [];
     }
 
     public int Hit(Creature enemy)
     {
-        return 0; // placeholder for now
+        ArgumentNullException.ThrowIfNull(enemy);
+        int totalDamage = AttackItems.Sum(item => item.Damage);
+        enemy.ReceiveHit(totalDamage);
+        return totalDamage;
     }
 
     public void ReceiveHit(int damage)
     {
-
+        ArgumentOutOfRangeException.ThrowIfNegative(damage);
+        int totalDefence = DefenceItems.Sum(item => item.DamageReduction);
+        int finalDamage = damage - totalDefence;
+        finalDamage = Math.Max(0, finalDamage); // If defence is greater than attack
+        HitPoints -= finalDamage;
     }
 
     public void Loot(WorldObject worldObject)
