@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Configuration\GameConfiguration.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Configuration\GameConfiguration.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GameFramework\GameFramework.csproj" />
   </ItemGroup>
 

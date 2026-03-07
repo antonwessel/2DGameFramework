@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<GameConfiguration>
+	<MaxX>100</MaxX>
+	<MaxY>100</MaxY>
+	<Difficulty>Beginner</Difficulty>
+</GameConfiguration>
