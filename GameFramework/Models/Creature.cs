@@ -1,6 +1,6 @@
 ﻿namespace GameFramework.Models;
 
-public class Creature
+public abstract class Creature
 {
     public string Name { get; private set; }
     public int HitPoints { get; private set; }
@@ -17,13 +17,16 @@ public class Creature
         DefenceItems = [];
     }
 
+    // Template method
     public int Hit(Creature enemy)
     {
         ArgumentNullException.ThrowIfNull(enemy);
-        int totalDamage = AttackItems.Sum(item => item.Damage);
+        int totalDamage = CalculateDamage();
         enemy.ReceiveHit(totalDamage);
         return totalDamage;
     }
+
+    protected abstract int CalculateDamage(); // Hook
 
     public void ReceiveHit(int damage)
     {
