@@ -2,6 +2,7 @@
 using GameFramework.Models;
 using GameFramework.Logging;
 using System.Diagnostics;
+using GameFramework.ConsoleDemo.Models;
 
 // Test XML-configuration
 
@@ -25,13 +26,16 @@ MyLogger.Instance.RemoveListener(listener);
 MyLogger.Instance.Log("this should not appear");
 Trace.Flush();
 
-// Test template method
+// Test template method + observer pattern
 
 BasicCreature attacker = new("Bob", 125, new Position(5, 12));
-attacker.AttackItems.Add(new AttackItem("Sword", 10, 7));
+attacker.AttackItems.Add(new AttackItem("Sword", 130, 7));
 
 BasicCreature target = new("Frank", 125, new Position(6, 12));
 target.DefenceItems.Add(new DefenceItem("Shield", 5));
+
+ConsoleCreatureObserver observer = new();
+target.AddObserver(observer);
 
 int hitPointsBeforeHit = target.HitPoints;
 int attackPower = attacker.Hit(target);

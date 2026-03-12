@@ -7,6 +7,7 @@ public abstract class Creature
     public Position Position { get; set; }
     public List<AttackItem> AttackItems { get; }
     public List<DefenceItem> DefenceItems { get; }
+    private readonly List<ICreatureObserver> _observers;
 
     public Creature(string name, int hitPoints, Position position)
     {
@@ -15,6 +16,7 @@ public abstract class Creature
         Position = position;
         AttackItems = [];
         DefenceItems = [];
+        _observers = [];
     }
 
     // Template method
@@ -31,10 +33,20 @@ public abstract class Creature
     public void ReceiveHit(int damage)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(damage);
+
+        bool wasAliveBeforeHit = HitPoints > 0;
+
         int totalDefence = DefenceItems.Sum(item => item.DamageReduction);
         int finalDamage = damage - totalDefence;
         finalDamage = Math.Max(0, finalDamage); // If defence is greater than attack
         HitPoints -= finalDamage;
+
+        NotifyHitObservers();
+
+        if (wasAliveBeforeHit && HitPoints <= 0)
+        {
+            NotifyDiedObservers();
+        }
     }
 
     public void Loot(WorldObject worldObject)
@@ -44,6 +56,34 @@ public abstract class Creature
         if (!worldObject.IsLootable)
         {
             throw new InvalidOperationException($"WorldObject '{worldObject.Name}' cannot be looted");
+        }
+    }
+
+    public void AddObserver(ICreatureObserver observer)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+        _observers.Add(observer);
+    }
+
+    public void RemoveObserver(ICreatureObserver observer)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+        _observers.Remove(observer);
+    }
+
+    private void NotifyHitObservers()
+    {
+        foreach (ICreatureObserver observer in _observers)
+        {
+            observer.OnCreatureHit(this);
+        }
+    }
+
+    private void NotifyDiedObservers()
+    {
+        foreach (ICreatureObserver observer in _observers)
+        {
+            observer.OnCreatureDied(this);
         }
     }
 }
