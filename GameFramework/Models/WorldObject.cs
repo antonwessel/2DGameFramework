@@ -3,12 +3,14 @@
 public class WorldObject
 {
     public string Name { get; }
-    public Position Position { get; set; }
+    public Position Position { get; }
     public bool IsLootable { get; }
     public bool IsRemovable { get; }
 
     public WorldObject(string name, Position position, bool isLootable, bool isRemovable)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+
         Name = name;
         Position = position;
         IsLootable = isLootable;

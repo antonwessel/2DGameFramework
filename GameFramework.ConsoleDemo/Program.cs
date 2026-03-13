@@ -44,3 +44,23 @@ int actualDamageTaken = hitPointsBeforeHit - target.HitPoints;
 Console.WriteLine(
     $"{attacker.Name} attacks {target.Name} with {attackPower} attack power. " +
     $"{target.Name} takes {actualDamageTaken} damage and now has {target.HitPoints} health left.");
+
+// Test strategy pattern
+
+BasicCreature sumAttacker = new("Sum Bob", 100, new Position(1, 1));
+sumAttacker.AttackItems.Add(new AttackItem("Sword", 10, 5));
+sumAttacker.AttackItems.Add(new AttackItem("Axe", 20, 3));
+
+BasicCreature highestAttacker = new("Highest Bob", 100, new Position(1, 1));
+highestAttacker.AttackItems.Add(new AttackItem("Sword", 10, 5));
+highestAttacker.AttackItems.Add(new AttackItem("Axe", 20, 3));
+highestAttacker.AttackStrategy = new HighestAttackStrategy();
+
+BasicCreature sumTarget = new("Target 1", 100, new Position(1, 1));
+BasicCreature highestTarget = new("Target 2", 100, new Position(1, 1));
+
+int sumAttackPower = sumAttacker.Hit(sumTarget);
+int highestAttackPower = highestAttacker.Hit(highestTarget);
+
+Console.WriteLine($"SumAttackStrategy damage: {sumAttackPower}");
+Console.WriteLine($"HighestAttackStrategy damage: {highestAttackPower}");

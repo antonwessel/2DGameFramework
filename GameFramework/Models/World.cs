@@ -10,6 +10,9 @@ public class World
 
     public World(int maxX, int maxY)
     {
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(maxX, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(maxY, 0);
+
         MaxX = maxX;
         MaxY = maxY;
         Creatures = [];

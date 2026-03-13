@@ -7,16 +7,27 @@ public abstract class Creature
     public Position Position { get; set; }
     public List<AttackItem> AttackItems { get; }
     public List<DefenceItem> DefenceItems { get; }
+    public IAttackStrategy AttackStrategy
+    {
+        get => _attackStrategy;
+        set => _attackStrategy = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
     private readonly List<ICreatureObserver> _observers;
+    private IAttackStrategy _attackStrategy;
 
     public Creature(string name, int hitPoints, Position position)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentOutOfRangeException.ThrowIfNegative(hitPoints);
+
         Name = name;
         HitPoints = hitPoints;
         Position = position;
         AttackItems = [];
         DefenceItems = [];
         _observers = [];
+        _attackStrategy = new SumAttackStrategy();
     }
 
     // Template method
@@ -28,7 +39,11 @@ public abstract class Creature
         return totalDamage;
     }
 
-    protected abstract int CalculateDamage(); // Hook
+    // Hook
+    protected virtual int CalculateDamage()
+    {
+        return AttackStrategy.CalculateDamage(this);
+    }
 
     public void ReceiveHit(int damage)
     {
@@ -38,8 +53,8 @@ public abstract class Creature
 
         int totalDefence = DefenceItems.Sum(item => item.DamageReduction);
         int finalDamage = damage - totalDefence;
-        finalDamage = Math.Max(0, finalDamage); // If defence is greater than attack
-        HitPoints -= finalDamage;
+        finalDamage = Math.Max(0, finalDamage);
+        HitPoints = Math.Max(0, HitPoints - finalDamage);
 
         NotifyHitObservers();
 

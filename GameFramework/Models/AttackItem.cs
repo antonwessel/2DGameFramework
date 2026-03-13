@@ -8,6 +8,10 @@ public class AttackItem
 
     public AttackItem(string name, int damage, int range)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentOutOfRangeException.ThrowIfNegative(damage);
+        ArgumentOutOfRangeException.ThrowIfNegative(range);
+
         Name = name;
         Damage = damage;
         Range = range;

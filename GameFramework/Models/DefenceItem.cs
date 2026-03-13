@@ -7,6 +7,9 @@ public class DefenceItem
 
     public DefenceItem(string name, int damageReduction)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentOutOfRangeException.ThrowIfNegative(damageReduction);
+
         Name = name;
         DamageReduction = damageReduction;
     }
