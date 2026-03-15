@@ -1,4 +1,6 @@
-﻿namespace GameFramework.Models;
+﻿using GameFramework.Models;
+
+namespace GameFramework.Strategies;
 
 public interface IAttackStrategy
 {

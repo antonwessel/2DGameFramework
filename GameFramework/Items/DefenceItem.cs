@@ -1,4 +1,4 @@
-﻿namespace GameFramework.Models;
+﻿namespace GameFramework.Items;
 
 public class DefenceItem
 {

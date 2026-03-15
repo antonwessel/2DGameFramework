@@ -1,4 +1,5 @@
 ﻿using GameFramework.Models;
+using GameFramework.Strategies;
 
 namespace GameFramework.ConsoleDemo.Models;
 

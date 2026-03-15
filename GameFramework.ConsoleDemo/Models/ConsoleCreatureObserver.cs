@@ -1,4 +1,5 @@
 ﻿using GameFramework.Models;
+using GameFramework.Observers;
 
 namespace GameFramework.ConsoleDemo.Models;
 

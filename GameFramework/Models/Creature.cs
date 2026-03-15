@@ -1,11 +1,15 @@
-﻿namespace GameFramework.Models;
+﻿using GameFramework.Items;
+using GameFramework.Observers;
+using GameFramework.Strategies;
+
+namespace GameFramework.Models;
 
 public abstract class Creature
 {
     public string Name { get; private set; }
     public int HitPoints { get; private set; }
     public Position Position { get; set; }
-    public List<AttackItem> AttackItems { get; }
+    public List<IAttackItem> AttackItems { get; }
     public List<DefenceItem> DefenceItems { get; }
     public IAttackStrategy AttackStrategy
     {

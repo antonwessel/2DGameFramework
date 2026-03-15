@@ -1,6 +1,6 @@
-﻿namespace GameFramework.Models;
+﻿namespace GameFramework.Items;
 
-public class AttackItem
+public class AttackItem : IAttackItem
 {
     public string Name { get; }
     public int Damage { get; }

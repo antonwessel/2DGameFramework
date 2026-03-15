@@ -1,4 +1,6 @@
-﻿namespace GameFramework.Models;
+﻿using GameFramework.Models;
+
+namespace GameFramework.Observers;
 
 public interface ICreatureObserver
 {
