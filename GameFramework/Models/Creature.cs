@@ -9,7 +9,8 @@ public abstract class Creature
     public string Name { get; private set; }
     public int HitPoints { get; private set; }
     public Position Position { get; set; }
-    public List<IAttackItem> AttackItems { get; }
+    public int MaxAttackItemWeight { get; }
+    public IReadOnlyList<IAttackItem> AttackItems => _attackItems;
     public List<DefenceItem> DefenceItems { get; }
     public IAttackStrategy AttackStrategy
     {
@@ -19,16 +20,19 @@ public abstract class Creature
 
     private readonly List<ICreatureObserver> _observers;
     private IAttackStrategy _attackStrategy;
+    private readonly List<IAttackItem> _attackItems;
 
-    public Creature(string name, int hitPoints, Position position)
+    public Creature(string name, int hitPoints, Position position, int maxAttackItemWeight)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentOutOfRangeException.ThrowIfNegative(hitPoints);
+        ArgumentOutOfRangeException.ThrowIfNegative(maxAttackItemWeight);
 
         Name = name;
         HitPoints = hitPoints;
         Position = position;
-        AttackItems = [];
+        MaxAttackItemWeight = maxAttackItemWeight;
+        _attackItems = [];
         DefenceItems = [];
         _observers = [];
         _attackStrategy = new SumAttackStrategy();
@@ -84,6 +88,21 @@ public abstract class Creature
         }
 
         worldObject.ApplyLoot(this);
+    }
+
+    public void AddAttackItem(IAttackItem attackItem)
+    {
+        ArgumentNullException.ThrowIfNull(attackItem);
+
+        int currentWeight = _attackItems.Sum(item => item.Weight);
+        int newTotalWeight = currentWeight + attackItem.Weight;
+
+        if (newTotalWeight > MaxAttackItemWeight)
+        {
+            throw new InvalidOperationException($"Creature '{Name}' cannot carry attack items above max weight {MaxAttackItemWeight}");
+        }
+
+        _attackItems.Add(attackItem);
     }
 
     public void AddObserver(ICreatureObserver observer)

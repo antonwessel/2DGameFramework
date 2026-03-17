@@ -2,7 +2,8 @@
 
 public class BasicCreature : Creature
 {
-    public BasicCreature(string name, int hitPoints, Position position) : base(name, hitPoints, position)
+    public BasicCreature(string name, int hitPoints, Position position, int maxAttackItemWeight)
+        : base(name, hitPoints, position, maxAttackItemWeight)
     {
     }
 }

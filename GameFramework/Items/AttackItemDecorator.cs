@@ -13,4 +13,5 @@ public abstract class AttackItemDecorator : IAttackItem
     public virtual string Name => InnerAttackItem.Name;
     public virtual int Damage => InnerAttackItem.Damage;
     public virtual int Range => InnerAttackItem.Range;
+    public virtual int Weight => InnerAttackItem.Weight;
 }

@@ -30,10 +30,10 @@ Console.WriteLine();
 
 Console.WriteLine("=== TEMPLATE + OBSERVER ===");
 
-BasicCreature attacker = new("Bob", 125, new Position(5, 12));
-attacker.AttackItems.Add(new AttackItem("Sword", 130, 7));
+BasicCreature attacker = new("Bob", 125, new Position(5, 12), 10);
+attacker.AddAttackItem(new AttackItem("Sword", 130, 7, 2));
 
-BasicCreature target = new("Frank", 125, new Position(6, 12));
+BasicCreature target = new("Frank", 125, new Position(6, 12), 10);
 target.DefenceItems.Add(new DefenceItem("Shield", 5));
 
 ConsoleCreatureObserver observer = new();
@@ -50,17 +50,17 @@ Console.WriteLine();
 
 Console.WriteLine("=== STRATEGY ===");
 
-BasicCreature sumAttacker = new("Sum Bob", 100, new Position(1, 1));
-sumAttacker.AttackItems.Add(new AttackItem("Sword", 10, 5));
-sumAttacker.AttackItems.Add(new AttackItem("Axe", 20, 3));
+BasicCreature sumAttacker = new("Sum Bob", 100, new Position(1, 1), 10);
+sumAttacker.AddAttackItem(new AttackItem("Sword", 10, 5, 2));
+sumAttacker.AddAttackItem(new AttackItem("Axe", 20, 3, 4));
 
-BasicCreature highestAttacker = new("Highest Bob", 100, new Position(1, 1));
-highestAttacker.AttackItems.Add(new AttackItem("Sword", 10, 5));
-highestAttacker.AttackItems.Add(new AttackItem("Axe", 20, 3));
+BasicCreature highestAttacker = new("Highest Bob", 100, new Position(1, 1), 10);
+highestAttacker.AddAttackItem(new AttackItem("Sword", 10, 5, 2));
+highestAttacker.AddAttackItem(new AttackItem("Axe", 20, 3, 4));
 highestAttacker.AttackStrategy = new HighestAttackStrategy();
 
-BasicCreature sumTarget = new("Target 1", 100, new Position(1, 1));
-BasicCreature highestTarget = new("Target 2", 100, new Position(1, 1));
+BasicCreature sumTarget = new("Target 1", 100, new Position(1, 1), 10);
+BasicCreature highestTarget = new("Target 2", 100, new Position(1, 1), 10);
 
 int sumAttackPower = sumAttacker.Hit(sumTarget);
 int highestAttackPower = highestAttacker.Hit(highestTarget);
@@ -71,20 +71,56 @@ Console.WriteLine();
 
 Console.WriteLine("=== DECORATOR ===");
 
-IAttackItem plainSword = new AttackItem("Plain Sword", 10, 5);
+IAttackItem plainSword = new AttackItem("Plain Sword", 10, 5, 2);
 IAttackItem boostedSword = new BoostedAttackItem(plainSword, 5);
 
-BasicCreature plainAttacker = new("Plain Bob", 100, new Position(2, 2));
-plainAttacker.AttackItems.Add(plainSword);
+BasicCreature plainAttacker = new("Plain Bob", 100, new Position(2, 2), 10);
+plainAttacker.AddAttackItem(plainSword);
 
-BasicCreature boostedAttacker = new("Boosted Bob", 100, new Position(2, 2));
-boostedAttacker.AttackItems.Add(boostedSword);
+BasicCreature boostedAttacker = new("Boosted Bob", 100, new Position(2, 2), 10);
+boostedAttacker.AddAttackItem(boostedSword);
 
-BasicCreature plainTarget = new("Plain Target", 100, new Position(2, 3));
-BasicCreature boostedTarget = new("Boosted Target", 100, new Position(2, 3));
+BasicCreature plainTarget = new("Plain Target", 100, new Position(2, 3), 10);
+BasicCreature boostedTarget = new("Boosted Target", 100, new Position(2, 3), 10);
 
 int plainDamage = plainAttacker.Hit(plainTarget);
 int boostedDamage = boostedAttacker.Hit(boostedTarget);
 
 Console.WriteLine($"Plain weapon damage: {plainDamage}");
 Console.WriteLine($"Boosted weapon damage: {boostedDamage}");
+
+Console.WriteLine();
+Console.WriteLine("=== COMPOSITE ===");
+
+IAttackItem compositeSword = new AttackItem("Composite Sword", 10, 5, 2);
+IAttackItem compositeAxe = new AttackItem("Composite Axe", 20, 3, 4);
+
+AttackItemComposite weaponSet = new("Weapon Set");
+weaponSet.AddItem(compositeSword);
+weaponSet.AddItem(compositeAxe);
+
+BasicCreature compositeAttacker = new("Composite Bob", 100, new Position(3, 3), 10);
+compositeAttacker.AddAttackItem(weaponSet);
+
+BasicCreature compositeTarget = new("Composite Target", 100, new Position(3, 4), 10);
+
+int compositeDamage = compositeAttacker.Hit(compositeTarget);
+
+Console.WriteLine($"Composite weapon damage: {compositeDamage}");
+Console.WriteLine($"Composite weapon range: {weaponSet.Range}");
+Console.WriteLine($"Composite weapon weight: {weaponSet.Weight}");
+
+Console.WriteLine();
+Console.WriteLine("=== WEIGHT LIMIT ===");
+
+BasicCreature weightLimitedCreature = new("Limited Bob", 100, new Position(4, 4), 5);
+
+try
+{
+    weightLimitedCreature.AddAttackItem(new AttackItem("Heavy Sword", 10, 5, 3));
+    weightLimitedCreature.AddAttackItem(new AttackItem("Heavy Axe", 20, 3, 4));
+}
+catch (InvalidOperationException ex)
+{
+    Console.WriteLine(ex.Message);
+}
