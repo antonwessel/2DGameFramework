@@ -124,3 +124,14 @@ catch (InvalidOperationException ex)
 {
     Console.WriteLine(ex.Message);
 }
+
+Console.WriteLine();
+Console.WriteLine("=== OPERATOR OVERLOAD ===");
+
+Position firstPosition = new(2, 3);
+Position secondPosition = new(4, 5);
+Position combinedPosition = firstPosition + secondPosition;
+
+Console.WriteLine(
+    $"({firstPosition.X}, {firstPosition.Y}) + ({secondPosition.X}, {secondPosition.Y}) = " +
+    $"({combinedPosition.X}, {combinedPosition.Y})");

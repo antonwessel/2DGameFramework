@@ -81,7 +81,7 @@ public abstract class Creature
             throw new InvalidOperationException($"WorldObject '{worldObject.Name}' cannot be looted");
         }
 
-        if (Position.X != worldObject.Position.X || Position.Y != worldObject.Position.Y)
+        if (!Position.Equals(worldObject.Position))
         {
             throw new InvalidOperationException(
                 $"Creature '{Name}' is not at the same position as world object '{worldObject.Name}'");
