@@ -4,14 +4,45 @@ using GameFramework.Strategies;
 
 namespace GameFramework.Models;
 
+/// <summary>
+/// Base class for creatures in the world.
+/// </summary>
 public abstract class Creature
 {
+    /// <summary>
+    /// Gets the creature name.
+    /// </summary>
     public string Name { get; private set; }
+
+    /// <summary>
+    /// Gets the current hit points.
+    /// </summary>
     public int HitPoints { get; private set; }
+
+    /// <summary>
+    /// Gets or sets the creature position.
+    /// </summary>
     public Position Position { get; set; }
+
+    /// <summary>
+    /// Gets the max total weight allowed for attack items.
+    /// </summary>
     public int MaxAttackItemWeight { get; }
+
+    /// <summary>
+    /// Gets the attack items the creature carries.
+    /// </summary>
     public IReadOnlyList<IAttackItem> AttackItems => _attackItems;
+
+    /// <summary>
+    /// Gets the defence items the creature uses.
+    /// </summary>
     public List<DefenceItem> DefenceItems { get; }
+
+    /// <summary>
+    /// Gets or sets the strategy used to calculate damage.
+    /// </summary>
+    /// <exception cref="ArgumentNullException">Thrown when the strategy is set to null.</exception>
     public IAttackStrategy AttackStrategy
     {
         get => _attackStrategy;
@@ -22,6 +53,13 @@ public abstract class Creature
     private IAttackStrategy _attackStrategy;
     private readonly List<IAttackItem> _attackItems;
 
+    /// <summary>
+    /// Creates a creature.
+    /// </summary>
+    /// <param name="name">The creature name.</param>
+    /// <param name="hitPoints">The starting hit points.</param>
+    /// <param name="position">The starting position.</param>
+    /// <param name="maxAttackItemWeight">The max total attack item weight.</param>
     public Creature(string name, int hitPoints, Position position, int maxAttackItemWeight)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
@@ -38,7 +76,11 @@ public abstract class Creature
         _attackStrategy = new SumAttackStrategy();
     }
 
-    // Template method
+    /// <summary>
+    /// Hits another creature.
+    /// </summary>
+    /// <param name="enemy">The creature to hit.</param>
+    /// <returns>The damage before defence is applied.</returns>
     public int Hit(Creature enemy)
     {
         ArgumentNullException.ThrowIfNull(enemy);
@@ -47,12 +89,19 @@ public abstract class Creature
         return totalDamage;
     }
 
-    // Hook
+    /// <summary>
+    /// Calculates damage for a hit.
+    /// </summary>
+    /// <remarks>Override this to change how damage is calculated.</remarks>
     protected virtual int CalculateDamage()
     {
         return AttackStrategy.CalculateDamage(this);
     }
 
+    /// <summary>
+    /// Applies incoming damage to the creature.
+    /// </summary>
+    /// <param name="damage">The incoming damage value.</param>
     public void ReceiveHit(int damage)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(damage);
@@ -72,6 +121,13 @@ public abstract class Creature
         }
     }
 
+    /// <summary>
+    /// Loots a world object at the current position.
+    /// </summary>
+    /// <param name="worldObject">The world object to loot.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the object cannot be looted or is at another position.
+    /// </exception>
     public void Loot(WorldObject worldObject)
     {
         ArgumentNullException.ThrowIfNull(worldObject);
@@ -90,6 +146,13 @@ public abstract class Creature
         worldObject.ApplyLoot(this);
     }
 
+    /// <summary>
+    /// Adds an attack item if the total weight fits.
+    /// </summary>
+    /// <param name="attackItem">The item to add.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the item would push the total weight past the limit.
+    /// </exception>
     public void AddAttackItem(IAttackItem attackItem)
     {
         ArgumentNullException.ThrowIfNull(attackItem);
@@ -105,12 +168,20 @@ public abstract class Creature
         _attackItems.Add(attackItem);
     }
 
+    /// <summary>
+    /// Adds an observer.
+    /// </summary>
+    /// <param name="observer">The observer to add.</param>
     public void AddObserver(ICreatureObserver observer)
     {
         ArgumentNullException.ThrowIfNull(observer);
         _observers.Add(observer);
     }
 
+    /// <summary>
+    /// Removes an observer.
+    /// </summary>
+    /// <param name="observer">The observer to remove.</param>
     public void RemoveObserver(ICreatureObserver observer)
     {
         ArgumentNullException.ThrowIfNull(observer);

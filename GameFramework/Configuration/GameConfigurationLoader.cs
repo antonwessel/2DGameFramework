@@ -2,9 +2,18 @@
 
 namespace GameFramework.Configuration;
 
-// This is the class responsible for actually loading the XML data
+/// <summary>
+/// Loads game configuration from XML.
+/// </summary>
 public static class GameConfigurationLoader
 {
+    /// <summary>
+    /// Loads configuration from an XML file.
+    /// </summary>
+    /// <param name="filePath">The path to the configuration file.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when required elements are missing or the difficulty value is invalid.
+    /// </exception>
     public static GameConfiguration Load(string filePath)
     {
         XDocument document = XDocument.Load(filePath);
