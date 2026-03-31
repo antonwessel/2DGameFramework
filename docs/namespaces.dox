@@ -1,0 +1,35 @@
+/** \file namespaces.dox
+ *  \brief Namespace documentation for the 2D Game Framework library.
+ */
+
+/** \namespace GameFramework
+ *  \brief Root namespace for the reusable 2D game framework library.
+ *
+ *  This namespace groups the feature-focused child namespaces that make up the
+ *  framework's configuration, world model, items, logging, observer, and
+ *  strategy APIs.
+ */
+
+/** \namespace GameFramework.Configuration
+ *  \brief Types for loading and storing game configuration.
+ */
+
+/** \namespace GameFramework.Items
+ *  \brief Attack and defence item abstractions, plus composite and decorator implementations.
+ */
+
+/** \namespace GameFramework.Logging
+ *  \brief Logging helpers used by the framework and demos.
+ */
+
+/** \namespace GameFramework.Models
+ *  \brief Core world, creature, and position types used by the framework.
+ */
+
+/** \namespace GameFramework.Observers
+ *  \brief Observer interfaces for creature hit and death events.
+ */
+
+/** \namespace GameFramework.Strategies
+ *  \brief Strategy interfaces and implementations for attack damage calculation.
+ */

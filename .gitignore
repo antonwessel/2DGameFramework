@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Doxygen output
+docs/doxygen/
+
+# Local .NET SDK home and cache files
+.dotnet/
