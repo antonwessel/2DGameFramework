@@ -40,4 +40,35 @@ public class World
         Creatures = [];
         WorldObjects = [];
     }
+
+    /// <summary>
+    /// Lets a creature loot an object that belongs to this world.
+    /// </summary>
+    /// <param name="creature">The creature looting the object.</param>
+    /// <param name="worldObject">The object to loot.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the creature or object is not part of this world.
+    /// </exception>
+    public void LootObject(Creature creature, WorldObject worldObject)
+    {
+        ArgumentNullException.ThrowIfNull(creature);
+        ArgumentNullException.ThrowIfNull(worldObject);
+
+        if (!Creatures.Contains(creature))
+        {
+            throw new InvalidOperationException($"Creature '{creature.Name}' is not part of this world.");
+        }
+
+        if (!WorldObjects.Contains(worldObject))
+        {
+            throw new InvalidOperationException($"WorldObject '{worldObject.Name}' is not part of this world.");
+        }
+
+        creature.Loot(worldObject);
+
+        if (worldObject.IsRemovable)
+        {
+            WorldObjects.Remove(worldObject);
+        }
+    }
 }

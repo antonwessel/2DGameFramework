@@ -142,15 +142,17 @@ Console.WriteLine("=== LOOT ===");
 World lootWorld = new(10, 10);
 Position lootPosition = new(5, 5);
 BasicCreature looter = new("Luna", 100, lootPosition, 10);
+AttackItem dagger = new("Dagger", 6, 2, 2);
+DefenceItem leatherVest = new("Leather Vest", 3);
 
 LootWorldObject chest = new(
     "Starter Chest",
     lootPosition,
-    new AttackItem("Dagger", 6, 2, 2));
+    dagger);
 LootWorldObject armorStand = new(
     "Armor Stand",
     lootPosition,
-    new DefenceItem("Leather Vest", 3));
+    leatherVest);
 
 lootWorld.Creatures.Add(looter);
 lootWorld.WorldObjects.Add(chest);
@@ -158,20 +160,43 @@ lootWorld.WorldObjects.Add(armorStand);
 
 int worldObjectsBeforeLoot = lootWorld.WorldObjects.Count;
 
-Console.WriteLine("Attack items before loot: none");
-Console.WriteLine("Defence items before loot: none");
+Console.WriteLine($"{looter.Name} starts with {looter.AttackItems.Count} attack items.");
+Console.WriteLine($"{looter.Name} starts with {looter.DefenceItems.Count} defence items.");
 Console.WriteLine($"World objects before loot: {worldObjectsBeforeLoot}");
 
-looter.Loot(chest);
-lootWorld.WorldObjects.Remove(chest);
+lootWorld.LootObject(looter, chest);
+Console.WriteLine($"{looter.Name} loots {chest.Name} and gets {dagger.Name}.");
 
-looter.Loot(armorStand);
-lootWorld.WorldObjects.Remove(armorStand);
+lootWorld.LootObject(looter, armorStand);
+Console.WriteLine($"{looter.Name} loots {armorStand.Name} and gets {leatherVest.Name}.");
 
-string attackItemsAfterLoot = looter.AttackItems[0].Name;
-string defenceItemsAfterLoot = looter.DefenceItems[0].Name;
 int worldObjectsAfterLoot = lootWorld.WorldObjects.Count;
 
-Console.WriteLine($"Attack items after loot: {attackItemsAfterLoot}");
-Console.WriteLine($"Defence items after loot: {defenceItemsAfterLoot}");
+Console.WriteLine($"{looter.Name} now has {looter.AttackItems.Count} attack item: {dagger.Name}.");
+Console.WriteLine($"{looter.Name} now has {looter.DefenceItems.Count} defence item: {leatherVest.Name}.");
 Console.WriteLine($"World objects after loot: {worldObjectsAfterLoot}");
+
+Console.WriteLine();
+Console.WriteLine("=== CONSUMABLE WORLD EFFECTS ===");
+
+World effectWorld = new(10, 10);
+Position effectPosition = new(7, 7);
+BasicCreature effectCreature = new("Mira", 40, effectPosition, 10);
+
+HitPointWorldObject healingPotion = new("Healing Potion", effectPosition, 10);
+HitPointWorldObject poisonFlask = new("Poison Flask", effectPosition, -15);
+
+effectWorld.Creatures.Add(effectCreature);
+effectWorld.WorldObjects.Add(healingPotion);
+effectWorld.WorldObjects.Add(poisonFlask);
+
+Console.WriteLine($"{effectCreature.Name} starts with {effectCreature.HitPoints} hit points.");
+Console.WriteLine($"World objects before effects: {effectWorld.WorldObjects.Count}");
+
+effectWorld.LootObject(effectCreature, healingPotion);
+Console.WriteLine($"{effectCreature.Name} uses {healingPotion.Name} and immediately goes to {effectCreature.HitPoints} hit points.");
+
+effectWorld.LootObject(effectCreature, poisonFlask);
+Console.WriteLine($"{effectCreature.Name} uses {poisonFlask.Name} and immediately drops to {effectCreature.HitPoints} hit points.");
+
+Console.WriteLine($"World objects after effects: {effectWorld.WorldObjects.Count}");

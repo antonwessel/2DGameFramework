@@ -122,6 +122,16 @@ public abstract class Creature
     }
 
     /// <summary>
+    /// Restores hit points to the creature.
+    /// </summary>
+    /// <param name="amount">The amount of hit points to restore.</param>
+    public void Heal(int amount)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(amount);
+        HitPoints += amount;
+    }
+
+    /// <summary>
     /// Loots a world object at the current position.
     /// </summary>
     /// <param name="worldObject">The world object to loot.</param>
