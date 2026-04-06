@@ -2,13 +2,13 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "2D Game Framework"
-PROJECT_BRIEF          = "Reusable C# library for the 2D game framework assignment."
+PROJECT_BRIEF          = "Reusable C# game framework library with creatures, items, world objects, and combat extension points."
 OUTPUT_DIRECTORY       = docs/doxygen
 OUTPUT_LANGUAGE        = English
 ALLOW_UNICODE_NAMES    = NO
-USE_MDFILE_AS_MAINPAGE = README.md
+USE_MDFILE_AS_MAINPAGE = docs/mainpage.md
 
-INPUT                  = README.md \
+INPUT                  = docs/mainpage.md \
                          docs/namespaces.dox \
                          GameFramework
 FILE_PATTERNS          = *.md \
@@ -16,7 +16,8 @@ FILE_PATTERNS          = *.md \
                          *.cs
 RECURSIVE              = YES
 EXCLUDE                = GameFramework/obj \
-                         GameFramework/bin
+                         GameFramework/bin \
+                         GameFramework.ConsoleDemo
 EXCLUDE_PATTERNS       = */obj/* \
                          */bin/*
 

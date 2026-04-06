@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a defence item.
 /// </summary>
-public class DefenceItem
+public class DefenceItem : IDefenceItem
 {
     /// <summary>
     /// Gets the item name.

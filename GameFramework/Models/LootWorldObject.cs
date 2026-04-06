@@ -8,7 +8,7 @@ namespace GameFramework.Models;
 public class LootWorldObject : WorldObject
 {
     private readonly IAttackItem? _attackItem;
-    private readonly DefenceItem? _defenceItem;
+    private readonly IDefenceItem? _defenceItem;
 
     /// <summary>
     /// Creates a loot object that gives an attack item.
@@ -28,7 +28,7 @@ public class LootWorldObject : WorldObject
     /// <param name="name">The object name.</param>
     /// <param name="position">The object position.</param>
     /// <param name="defenceItem">The defence item granted when looted.</param>
-    public LootWorldObject(string name, Position position, DefenceItem defenceItem)
+    public LootWorldObject(string name, Position position, IDefenceItem defenceItem)
         : base(name, position, isLootable: true, isRemovable: true)
     {
         _defenceItem = defenceItem ?? throw new ArgumentNullException(nameof(defenceItem));
@@ -48,7 +48,7 @@ public class LootWorldObject : WorldObject
         }
         else if (_defenceItem is not null)
         {
-            creature.DefenceItems.Add(_defenceItem);
+            creature.AddDefenceItem(_defenceItem);
         }
         else
         {

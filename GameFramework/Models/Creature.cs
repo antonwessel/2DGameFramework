@@ -1,4 +1,4 @@
-﻿using GameFramework.Items;
+using GameFramework.Items;
 using GameFramework.Observers;
 using GameFramework.Strategies;
 
@@ -37,7 +37,7 @@ public abstract class Creature
     /// <summary>
     /// Gets the defence items the creature uses.
     /// </summary>
-    public List<DefenceItem> DefenceItems { get; }
+    public IReadOnlyList<IDefenceItem> DefenceItems => _defenceItems;
 
     /// <summary>
     /// Gets or sets the strategy used to calculate damage.
@@ -49,9 +49,11 @@ public abstract class Creature
         set => _attackStrategy = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    private readonly List<ICreatureObserver> _observers;
+    private readonly List<ICreatureHitObserver> _hitObservers;
+    private readonly List<ICreatureDeathObserver> _deathObservers;
     private IAttackStrategy _attackStrategy;
     private readonly List<IAttackItem> _attackItems;
+    private readonly List<IDefenceItem> _defenceItems;
 
     /// <summary>
     /// Creates a creature.
@@ -60,20 +62,28 @@ public abstract class Creature
     /// <param name="hitPoints">The starting hit points.</param>
     /// <param name="position">The starting position.</param>
     /// <param name="maxAttackItemWeight">The max total attack item weight.</param>
-    public Creature(string name, int hitPoints, Position position, int maxAttackItemWeight)
+    /// <param name="attackStrategy">The strategy used to calculate attack damage.</param>
+    public Creature(
+        string name,
+        int hitPoints,
+        Position position,
+        int maxAttackItemWeight,
+        IAttackStrategy attackStrategy)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentOutOfRangeException.ThrowIfNegative(hitPoints);
         ArgumentOutOfRangeException.ThrowIfNegative(maxAttackItemWeight);
+        ArgumentNullException.ThrowIfNull(attackStrategy);
 
         Name = name;
         HitPoints = hitPoints;
         Position = position;
         MaxAttackItemWeight = maxAttackItemWeight;
         _attackItems = [];
-        DefenceItems = [];
-        _observers = [];
-        _attackStrategy = new SumAttackStrategy();
+        _defenceItems = [];
+        _hitObservers = [];
+        _deathObservers = [];
+        _attackStrategy = attackStrategy;
     }
 
     /// <summary>
@@ -108,7 +118,7 @@ public abstract class Creature
 
         bool wasAliveBeforeHit = HitPoints > 0;
 
-        int totalDefence = DefenceItems.Sum(item => item.DamageReduction);
+        int totalDefence = _defenceItems.Sum(item => item.DamageReduction);
         int finalDamage = damage - totalDefence;
         finalDamage = Math.Max(0, finalDamage);
         HitPoints = Math.Max(0, HitPoints - finalDamage);
@@ -179,28 +189,88 @@ public abstract class Creature
     }
 
     /// <summary>
-    /// Adds an observer.
+    /// Adds a defence item.
+    /// </summary>
+    /// <param name="defenceItem">The item to add.</param>
+    public void AddDefenceItem(IDefenceItem defenceItem)
+    {
+        ArgumentNullException.ThrowIfNull(defenceItem);
+        _defenceItems.Add(defenceItem);
+    }
+
+    /// <summary>
+    /// Adds a hit observer.
+    /// </summary>
+    /// <param name="observer">The observer to add.</param>
+    public void AddObserver(ICreatureHitObserver observer)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+
+        if (!_hitObservers.Contains(observer))
+        {
+            _hitObservers.Add(observer);
+        }
+    }
+
+    /// <summary>
+    /// Adds a death observer.
+    /// </summary>
+    /// <param name="observer">The observer to add.</param>
+    public void AddObserver(ICreatureDeathObserver observer)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+
+        if (!_deathObservers.Contains(observer))
+        {
+            _deathObservers.Add(observer);
+        }
+    }
+
+    /// <summary>
+    /// Adds a combined observer.
     /// </summary>
     /// <param name="observer">The observer to add.</param>
     public void AddObserver(ICreatureObserver observer)
     {
         ArgumentNullException.ThrowIfNull(observer);
-        _observers.Add(observer);
+        AddObserver((ICreatureHitObserver)observer);
+        AddObserver((ICreatureDeathObserver)observer);
     }
 
     /// <summary>
-    /// Removes an observer.
+    /// Removes a hit observer.
+    /// </summary>
+    /// <param name="observer">The observer to remove.</param>
+    public void RemoveObserver(ICreatureHitObserver observer)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+        _hitObservers.Remove(observer);
+    }
+
+    /// <summary>
+    /// Removes a death observer.
+    /// </summary>
+    /// <param name="observer">The observer to remove.</param>
+    public void RemoveObserver(ICreatureDeathObserver observer)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+        _deathObservers.Remove(observer);
+    }
+
+    /// <summary>
+    /// Removes a combined observer.
     /// </summary>
     /// <param name="observer">The observer to remove.</param>
     public void RemoveObserver(ICreatureObserver observer)
     {
         ArgumentNullException.ThrowIfNull(observer);
-        _observers.Remove(observer);
+        RemoveObserver((ICreatureHitObserver)observer);
+        RemoveObserver((ICreatureDeathObserver)observer);
     }
 
     private void NotifyHitObservers()
     {
-        foreach (ICreatureObserver observer in _observers)
+        foreach (ICreatureHitObserver observer in _hitObservers)
         {
             observer.OnCreatureHit(this);
         }
@@ -208,7 +278,7 @@ public abstract class Creature
 
     private void NotifyDiedObservers()
     {
-        foreach (ICreatureObserver observer in _observers)
+        foreach (ICreatureDeathObserver observer in _deathObservers)
         {
             observer.OnCreatureDied(this);
         }

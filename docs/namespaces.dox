@@ -19,7 +19,7 @@
  */
 
 /** \namespace GameFramework.Logging
- *  \brief Logging helpers used by the framework and demos.
+ *  \brief Logging helpers used by the framework.
  */
 
 /** \namespace GameFramework.Models

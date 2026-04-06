@@ -35,7 +35,7 @@ BasicCreature attacker = new("Bob", 125, new Position(5, 12), 10);
 attacker.AddAttackItem(new AttackItem("Sword", 130, 7, 2));
 
 BasicCreature target = new("Frank", 125, new Position(6, 12), 10);
-target.DefenceItems.Add(new DefenceItem("Shield", 5));
+target.AddDefenceItem(new DefenceItem("Shield", 5));
 
 ConsoleCreatureObserver observer = new();
 target.AddObserver(observer);
@@ -55,10 +55,9 @@ BasicCreature sumAttacker = new("Sum Bob", 100, new Position(1, 1), 10);
 sumAttacker.AddAttackItem(new AttackItem("Sword", 10, 5, 2));
 sumAttacker.AddAttackItem(new AttackItem("Axe", 20, 3, 4));
 
-BasicCreature highestAttacker = new("Highest Bob", 100, new Position(1, 1), 10);
+BasicCreature highestAttacker = new("Highest Bob", 100, new Position(1, 1), 10, new HighestAttackStrategy());
 highestAttacker.AddAttackItem(new AttackItem("Sword", 10, 5, 2));
 highestAttacker.AddAttackItem(new AttackItem("Axe", 20, 3, 4));
-highestAttacker.AttackStrategy = new HighestAttackStrategy();
 
 BasicCreature sumTarget = new("Target 1", 100, new Position(1, 1), 10);
 BasicCreature highestTarget = new("Target 2", 100, new Position(1, 1), 10);
