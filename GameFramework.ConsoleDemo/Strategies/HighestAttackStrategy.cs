@@ -1,7 +1,7 @@
 ﻿using GameFramework.Models;
 using GameFramework.Strategies;
 
-namespace GameFramework.ConsoleDemo.Models;
+namespace GameFramework.ConsoleDemo.Strategies;
 
 public class HighestAttackStrategy : IAttackStrategy
 {

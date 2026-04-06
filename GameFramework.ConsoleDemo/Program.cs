@@ -1,5 +1,6 @@
 ﻿using GameFramework.Configuration;
-using GameFramework.ConsoleDemo.Models;
+using GameFramework.ConsoleDemo.Observers;
+using GameFramework.ConsoleDemo.Strategies;
 using GameFramework.Items;
 using GameFramework.Logging;
 using GameFramework.Models;

@@ -1,7 +1,7 @@
 ﻿using GameFramework.Models;
 using GameFramework.Observers;
 
-namespace GameFramework.ConsoleDemo.Models;
+namespace GameFramework.ConsoleDemo.Observers;
 
 public class ConsoleCreatureObserver : ICreatureObserver
 {
