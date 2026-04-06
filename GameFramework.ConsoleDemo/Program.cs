@@ -135,3 +135,43 @@ Position combinedPosition = firstPosition + secondPosition;
 Console.WriteLine(
     $"({firstPosition.X}, {firstPosition.Y}) + ({secondPosition.X}, {secondPosition.Y}) = " +
     $"({combinedPosition.X}, {combinedPosition.Y})");
+
+Console.WriteLine();
+Console.WriteLine("=== LOOT ===");
+
+World lootWorld = new(10, 10);
+Position lootPosition = new(5, 5);
+BasicCreature looter = new("Luna", 100, lootPosition, 10);
+
+LootWorldObject chest = new(
+    "Starter Chest",
+    lootPosition,
+    new AttackItem("Dagger", 6, 2, 2));
+LootWorldObject armorStand = new(
+    "Armor Stand",
+    lootPosition,
+    new DefenceItem("Leather Vest", 3));
+
+lootWorld.Creatures.Add(looter);
+lootWorld.WorldObjects.Add(chest);
+lootWorld.WorldObjects.Add(armorStand);
+
+int worldObjectsBeforeLoot = lootWorld.WorldObjects.Count;
+
+Console.WriteLine("Attack items before loot: none");
+Console.WriteLine("Defence items before loot: none");
+Console.WriteLine($"World objects before loot: {worldObjectsBeforeLoot}");
+
+looter.Loot(chest);
+lootWorld.WorldObjects.Remove(chest);
+
+looter.Loot(armorStand);
+lootWorld.WorldObjects.Remove(armorStand);
+
+string attackItemsAfterLoot = looter.AttackItems[0].Name;
+string defenceItemsAfterLoot = looter.DefenceItems[0].Name;
+int worldObjectsAfterLoot = lootWorld.WorldObjects.Count;
+
+Console.WriteLine($"Attack items after loot: {attackItemsAfterLoot}");
+Console.WriteLine($"Defence items after loot: {defenceItemsAfterLoot}");
+Console.WriteLine($"World objects after loot: {worldObjectsAfterLoot}");
