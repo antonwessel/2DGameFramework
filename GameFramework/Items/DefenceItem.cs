@@ -20,6 +20,8 @@ public class DefenceItem : IDefenceItem
     /// </summary>
     /// <param name="name">The item name.</param>
     /// <param name="damageReduction">The damage reduction value.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="name"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="damageReduction"/> is negative.</exception>
     public DefenceItem(string name, int damageReduction)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);

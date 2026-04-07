@@ -30,6 +30,7 @@ public sealed class MyLogger
     /// Adds a trace listener.
     /// </summary>
     /// <param name="listener">The listener to add.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="listener"/> is null.</exception>
     public void AddListener(TraceListener listener)
     {
         ArgumentNullException.ThrowIfNull(listener);
@@ -40,6 +41,7 @@ public sealed class MyLogger
     /// Removes a trace listener.
     /// </summary>
     /// <param name="listener">The listener to remove.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="listener"/> is null.</exception>
     public void RemoveListener(TraceListener listener)
     {
         ArgumentNullException.ThrowIfNull(listener);

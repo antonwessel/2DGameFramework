@@ -5,7 +5,7 @@ namespace GameFramework.Models;
 /// <summary>
 /// Represents a lootable world object that gives either an attack item or a defence item.
 /// </summary>
-public class LootWorldObject : WorldObject
+public class LootWorldObject : WorldObject, ILootableWorldObject
 {
     private readonly IAttackItem? _attackItem;
     private readonly IDefenceItem? _defenceItem;
@@ -16,8 +16,10 @@ public class LootWorldObject : WorldObject
     /// <param name="name">The object name.</param>
     /// <param name="position">The object position.</param>
     /// <param name="attackItem">The attack item granted when looted.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="name"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="attackItem"/> is null.</exception>
     public LootWorldObject(string name, Position position, IAttackItem attackItem)
-        : base(name, position, isLootable: true, isRemovable: true)
+        : base(name, position, isRemovable: true)
     {
         _attackItem = attackItem ?? throw new ArgumentNullException(nameof(attackItem));
     }
@@ -28,8 +30,10 @@ public class LootWorldObject : WorldObject
     /// <param name="name">The object name.</param>
     /// <param name="position">The object position.</param>
     /// <param name="defenceItem">The defence item granted when looted.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="name"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="defenceItem"/> is null.</exception>
     public LootWorldObject(string name, Position position, IDefenceItem defenceItem)
-        : base(name, position, isLootable: true, isRemovable: true)
+        : base(name, position, isRemovable: true)
     {
         _defenceItem = defenceItem ?? throw new ArgumentNullException(nameof(defenceItem));
     }
@@ -38,7 +42,9 @@ public class LootWorldObject : WorldObject
     /// Applies this object's loot to a creature.
     /// </summary>
     /// <param name="creature">The creature getting the loot.</param>
-    public override void ApplyLoot(Creature creature)
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="creature"/> is null.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the loot object does not contain any loot.</exception>
+    public void ApplyLoot(Creature creature)
     {
         ArgumentNullException.ThrowIfNull(creature);
 

@@ -14,6 +14,7 @@ public abstract class AttackItemDecorator : IAttackItem
     /// Wraps another attack item.
     /// </summary>
     /// <param name="innerAttackItem">The item to wrap.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="innerAttackItem"/> is null.</exception>
     protected AttackItemDecorator(IAttackItem innerAttackItem)
     {
         ArgumentNullException.ThrowIfNull(innerAttackItem);

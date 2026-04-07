@@ -11,5 +11,7 @@ public interface IAttackStrategy
     /// Calculates attack damage for a creature.
     /// </summary>
     /// <param name="creature">The creature to calculate damage for.</param>
+    /// <returns>The calculated damage value.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="creature"/> is null.</exception>
     int CalculateDamage(Creature creature);
 }

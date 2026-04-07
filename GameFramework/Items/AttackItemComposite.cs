@@ -31,6 +31,7 @@ public class AttackItemComposite : IAttackItem
     /// Creates an empty attack item group.
     /// </summary>
     /// <param name="name">The group name.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="name"/> is null, empty, or whitespace.</exception>
     public AttackItemComposite(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
@@ -43,9 +44,24 @@ public class AttackItemComposite : IAttackItem
     /// Adds an item to the group.
     /// </summary>
     /// <param name="attackItem">The item to add.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="attackItem"/> is null.</exception>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the composite would contain itself or create a cyclic composite structure.
+    /// </exception>
     public void AddItem(IAttackItem attackItem)
     {
         ArgumentNullException.ThrowIfNull(attackItem);
+
+        if (ReferenceEquals(attackItem, this))
+        {
+            throw new InvalidOperationException("An attack item composite cannot contain itself.");
+        }
+
+        if (attackItem is AttackItemComposite composite && composite.ContainsComposite(this))
+        {
+            throw new InvalidOperationException("An attack item composite cannot contain a cyclic composite.");
+        }
+
         _attackItems.Add(attackItem);
     }
 
@@ -53,9 +69,28 @@ public class AttackItemComposite : IAttackItem
     /// Removes an item from the group.
     /// </summary>
     /// <param name="attackItem">The item to remove.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="attackItem"/> is null.</exception>
     public void RemoveItem(IAttackItem attackItem)
     {
         ArgumentNullException.ThrowIfNull(attackItem);
         _attackItems.Remove(attackItem);
+    }
+
+    private bool ContainsComposite(AttackItemComposite target)
+    {
+        foreach (IAttackItem attackItem in _attackItems)
+        {
+            if (ReferenceEquals(attackItem, target))
+            {
+                return true;
+            }
+
+            if (attackItem is AttackItemComposite composite && composite.ContainsComposite(target))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

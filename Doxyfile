@@ -24,5 +24,6 @@ EXCLUDE_PATTERNS       = */obj/* \
 GENERATE_HTML          = YES
 HTML_OUTPUT            = html
 GENERATE_LATEX         = NO
+EXTRACT_STATIC         = YES
 
 HAVE_DOT               = NO

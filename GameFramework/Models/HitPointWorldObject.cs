@@ -4,7 +4,7 @@ namespace GameFramework.Models;
 /// Represents a consumable world object that changes hit points immediately when looted.
 /// The effect is applied directly and the object is not added to a creature inventory.
 /// </summary>
-public class HitPointWorldObject : WorldObject
+public class HitPointWorldObject : WorldObject, ILootableWorldObject
 {
     /// <summary>
     /// Gets the hit-point change applied when the object is looted.
@@ -20,8 +20,10 @@ public class HitPointWorldObject : WorldObject
     /// <param name="position">The object position.</param>
     /// <param name="hitPointDelta">The hit-point change to apply.</param>
     /// <param name="isRemovable">Whether the object is removed after loot.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="name"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hitPointDelta"/> is zero.</exception>
     public HitPointWorldObject(string name, Position position, int hitPointDelta, bool isRemovable = true)
-        : base(name, position, isLootable: true, isRemovable: isRemovable)
+        : base(name, position, isRemovable: isRemovable)
     {
         if (hitPointDelta == 0)
         {
@@ -35,7 +37,8 @@ public class HitPointWorldObject : WorldObject
     /// Applies the hit-point effect to a creature immediately.
     /// </summary>
     /// <param name="creature">The creature receiving the effect.</param>
-    public override void ApplyLoot(Creature creature)
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="creature"/> is null.</exception>
+    public void ApplyLoot(Creature creature)
     {
         ArgumentNullException.ThrowIfNull(creature);
 

@@ -32,6 +32,10 @@ public class AttackItem : IAttackItem
     /// <param name="damage">The damage value.</param>
     /// <param name="range">The attack range.</param>
     /// <param name="weight">The item weight.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="name"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when <paramref name="damage"/>, <paramref name="range"/>, or <paramref name="weight"/> is negative.
+    /// </exception>
     public AttackItem(string name, int damage, int range, int weight)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
