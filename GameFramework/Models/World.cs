@@ -5,6 +5,9 @@
 /// </summary>
 public class World
 {
+    private readonly List<Creature> _creatures;
+    private readonly List<WorldObject> _worldObjects;
+
     /// <summary>
     /// Gets the max X value for the world.
     /// </summary>
@@ -18,12 +21,12 @@ public class World
     /// <summary>
     /// Gets the creatures in the world.
     /// </summary>
-    public List<Creature> Creatures { get; }
+    public IReadOnlyList<Creature> Creatures => _creatures;
 
     /// <summary>
     /// Gets the world objects in the world.
     /// </summary>
-    public List<WorldObject> WorldObjects { get; }
+    public IReadOnlyList<WorldObject> WorldObjects => _worldObjects;
 
     /// <summary>
     /// Creates a world.
@@ -37,8 +40,40 @@ public class World
 
         MaxX = maxX;
         MaxY = maxY;
-        Creatures = [];
-        WorldObjects = [];
+        _creatures = [];
+        _worldObjects = [];
+    }
+
+    /// <summary>
+    /// Adds a creature to the world.
+    /// </summary>
+    /// <param name="creature">The creature to add.</param>
+    public void AddCreature(Creature creature)
+    {
+        ArgumentNullException.ThrowIfNull(creature);
+
+        if (_creatures.Contains(creature))
+        {
+            throw new InvalidOperationException($"Creature '{creature.Name}' is already part of this world.");
+        }
+
+        _creatures.Add(creature);
+    }
+
+    /// <summary>
+    /// Adds a world object to the world.
+    /// </summary>
+    /// <param name="worldObject">The world object to add.</param>
+    public void AddWorldObject(WorldObject worldObject)
+    {
+        ArgumentNullException.ThrowIfNull(worldObject);
+
+        if (_worldObjects.Contains(worldObject))
+        {
+            throw new InvalidOperationException($"WorldObject '{worldObject.Name}' is already part of this world.");
+        }
+
+        _worldObjects.Add(worldObject);
     }
 
     /// <summary>
@@ -54,12 +89,12 @@ public class World
         ArgumentNullException.ThrowIfNull(creature);
         ArgumentNullException.ThrowIfNull(worldObject);
 
-        if (!Creatures.Contains(creature))
+        if (!_creatures.Contains(creature))
         {
             throw new InvalidOperationException($"Creature '{creature.Name}' is not part of this world.");
         }
 
-        if (!WorldObjects.Contains(worldObject))
+        if (!_worldObjects.Contains(worldObject))
         {
             throw new InvalidOperationException($"WorldObject '{worldObject.Name}' is not part of this world.");
         }
@@ -68,7 +103,7 @@ public class World
 
         if (worldObject.IsRemovable)
         {
-            WorldObjects.Remove(worldObject);
+            _worldObjects.Remove(worldObject);
         }
     }
 }

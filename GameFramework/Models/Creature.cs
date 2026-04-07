@@ -12,7 +12,7 @@ public abstract class Creature
     /// <summary>
     /// Gets the creature name.
     /// </summary>
-    public string Name { get; private set; }
+    public string Name { get; }
 
     /// <summary>
     /// Gets the current hit points.

@@ -154,9 +154,9 @@ LootWorldObject armorStand = new(
     lootPosition,
     leatherVest);
 
-lootWorld.Creatures.Add(looter);
-lootWorld.WorldObjects.Add(chest);
-lootWorld.WorldObjects.Add(armorStand);
+lootWorld.AddCreature(looter);
+lootWorld.AddWorldObject(chest);
+lootWorld.AddWorldObject(armorStand);
 
 int worldObjectsBeforeLoot = lootWorld.WorldObjects.Count;
 
@@ -186,9 +186,9 @@ BasicCreature effectCreature = new("Mira", 40, effectPosition, 10);
 HitPointWorldObject healingPotion = new("Healing Potion", effectPosition, 10);
 HitPointWorldObject poisonFlask = new("Poison Flask", effectPosition, -15);
 
-effectWorld.Creatures.Add(effectCreature);
-effectWorld.WorldObjects.Add(healingPotion);
-effectWorld.WorldObjects.Add(poisonFlask);
+effectWorld.AddCreature(effectCreature);
+effectWorld.AddWorldObject(healingPotion);
+effectWorld.AddWorldObject(poisonFlask);
 
 Console.WriteLine($"{effectCreature.Name} starts with {effectCreature.HitPoints} hit points.");
 Console.WriteLine($"World objects before effects: {effectWorld.WorldObjects.Count}");
