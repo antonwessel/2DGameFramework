@@ -1,9 +1,10 @@
 using GameFramework.Configuration;
+using GameFramework.ConsoleDemo.Logging;
+using GameFramework.ConsoleDemo.Observers;
 using GameFramework.ConsoleDemo.Strategies;
 using GameFramework.Items;
 using GameFramework.Logging;
 using GameFramework.Models;
-using GameFramework.Observers;
 using System.Diagnostics;
 
 PrefixedConsoleTraceListener listener = new();
@@ -176,25 +177,4 @@ void RunWorldObjectDemo(GameConfiguration config)
     Console.WriteLine(
         $"After loot: creatures {world.Creatures.Count}, world objects {world.WorldObjects.Count}, attack items {looter.AttackItems.Count}, hit points {looter.HitPoints}.");
     Console.WriteLine($"Result: Luna gains {dagger.Name}, heals to {looter.HitPoints} hit points, the chest and potion are removed, and the rock remains in the world.");
-}
-
-public sealed class PrefixedConsoleTraceListener : TraceListener
-{
-    public override void Write(string? message)
-    {
-        Console.Write(message);
-    }
-
-    public override void WriteLine(string? message)
-    {
-        Console.WriteLine($"Trace: {message}");
-    }
-}
-
-public class ConsoleHitObserver : ICreatureHitObserver
-{
-    public void OnCreatureHit(Creature creature)
-    {
-        Console.WriteLine($"Observer: {creature.Name} was hit. HitPoints: {creature.HitPoints}");
-    }
 }
