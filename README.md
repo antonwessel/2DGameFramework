@@ -1,7 +1,7 @@
-# 2D Game Framework
+# AntonWessel.GameFramework
 
-Mandatory assignment for Advanced Software Construction.
+A reusable .NET 10 2D game framework library for the Advanced Software Construction mandatory assignment.
 
-Contains:
-- GameFramework (library)
-- Console demo application
+This NuGet package contains the GameFramework library.
+
+This repository also includes a separate console demo application.

@@ -1,9 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <PackageId>AntonWessel.GameFramework</PackageId>
+    <Version>1.0.1</Version>
+    <Authors>antonwessel</Authors>
+    <Description>A reusable .NET 10 2D game framework library for the Advanced Software Construction mandatory assignment.</Description>
+    <PackageProjectUrl>https://github.com/antwess/2DGameFramework</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/antwess/2DGameFramework</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>2d-game;game-framework;dotnet;assignment</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
