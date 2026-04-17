@@ -1,5 +1,6 @@
 using GameFramework.Configuration;
 using GameFramework.ConsoleDemo.Logging;
+using GameFramework.ConsoleDemo.Models;
 using GameFramework.ConsoleDemo.Observers;
 using GameFramework.ConsoleDemo.Strategies;
 using GameFramework.Items;
@@ -17,6 +18,7 @@ try
     GameConfiguration config = LoadConfigurationAndEnableTracing();
     RunCombatDemo();
     RunStrategyDemo();
+    RunTemplateMethodDemo();
     RunAttackItemPatternDemo();
     RunWorldObjectDemo(config);
 }
@@ -105,6 +107,31 @@ void RunStrategyDemo()
 
     Console.WriteLine($"Result: SumAttackStrategy gives {sumAttackPower} damage.");
     Console.WriteLine($"Result: HighestAttackStrategy gives {highestAttackPower} damage.");
+}
+
+void RunTemplateMethodDemo()
+{
+    PrintSection("Template Method");
+
+    BasicCreature basicAttacker = new("Basic Bob", 100, new Position(4, 4), 10);
+    basicAttacker.AddAttackItem(new AttackItem("Sword", 10, 5, 2));
+    basicAttacker.AddAttackItem(new AttackItem("Axe", 20, 3, 4));
+
+    BerserkerCreature berserkerAttacker = new("Berserker Bob", 100, new Position(4, 4), 10);
+    berserkerAttacker.AddAttackItem(new AttackItem("Sword", 10, 5, 2));
+    berserkerAttacker.AddAttackItem(new AttackItem("Axe", 20, 3, 4));
+
+    BasicCreature basicTarget = new("Basic Target", 100, new Position(5, 4), 10);
+    BasicCreature berserkerTarget = new("Berserker Target", 100, new Position(5, 4), 10);
+
+    Console.WriteLine(
+        "Setup: both attackers use the same sword (10 damage) and axe (20 damage) from 1 tile away. Berserker Bob overrides Creature's template hook to add +5 damage after the shared combat flow calculates base damage.");
+
+    int basicDamage = basicAttacker.Hit(basicTarget);
+    int berserkerDamage = berserkerAttacker.Hit(berserkerTarget);
+
+    Console.WriteLine($"Result: BasicCreature deals {basicDamage} damage with the shared template flow.");
+    Console.WriteLine($"Result: BerserkerCreature deals {berserkerDamage} damage by overriding the template hook.");
 }
 
 void RunAttackItemPatternDemo()

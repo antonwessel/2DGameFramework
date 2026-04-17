@@ -6,13 +6,14 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>AntonWessel.GameFramework</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.3</Version>
     <Authors>antonwessel</Authors>
-    <Description>A reusable .NET 10 2D game framework library for the Advanced Software Construction mandatory assignment.</Description>
+    <Description>Simple .NET 10 library for a turn-based 2D game assignment with creatures, items, world objects, logging, and common design patterns.</Description>
     <PackageProjectUrl>https://github.com/antwess/2DGameFramework</PackageProjectUrl>
     <RepositoryUrl>https://github.com/antwess/2DGameFramework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>Polished NuGet package text, clarified Template Method support in Creature, and updated the console demo.</PackageReleaseNotes>
     <PackageTags>2d-game;game-framework;dotnet;assignment</PackageTags>
   </PropertyGroup>
 

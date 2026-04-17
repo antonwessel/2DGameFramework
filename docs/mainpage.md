@@ -7,7 +7,7 @@ The library provides:
 - world and position models
 - creatures with combat, loot, and observer support
 - attack and defence item abstractions
-- combat extension points through strategy, decorator, and composite patterns
+- combat extension points through template method, strategy, decorator, and composite patterns
 - XML-based configuration loading
 - logging through a singleton logger
 

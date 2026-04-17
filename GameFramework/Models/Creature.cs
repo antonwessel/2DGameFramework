@@ -92,11 +92,15 @@ public abstract class Creature
     }
 
     /// <summary>
-    /// Hits another creature.
+    /// Hits another creature using the fixed combat flow for all creature types.
     /// </summary>
     /// <param name="enemy">The creature to hit.</param>
     /// <returns>The damage before defence is applied, or 0 if no attack can be made.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="enemy"/> is null.</exception>
+    /// <remarks>
+    /// This method acts as a template method. Subclasses can override specific hook methods,
+    /// such as <see cref="AdjustDamage(int, Creature)"/>, without replacing the overall combat flow.
+    /// </remarks>
     public int Hit(Creature enemy)
     {
         ArgumentNullException.ThrowIfNull(enemy);
@@ -115,6 +119,7 @@ public abstract class Creature
         }
 
         int totalDamage = CalculateDamage();
+        totalDamage = AdjustDamage(totalDamage, enemy);
         GameFramework.Logging.MyLogger.Instance.Log(
             $"Combat: '{Name}' attacks '{enemy.Name}' for {totalDamage} potential damage (range {maxRange}, distance {distance}).");
         enemy.ReceiveHit(totalDamage);
@@ -128,6 +133,20 @@ public abstract class Creature
     protected virtual int CalculateDamage()
     {
         return AttackStrategy.CalculateDamage(this);
+    }
+
+    /// <summary>
+    /// Adjusts calculated damage before it is applied to the enemy.
+    /// </summary>
+    /// <param name="damage">The damage calculated by the active attack strategy.</param>
+    /// <param name="enemy">The creature that will receive the hit.</param>
+    /// <returns>The final damage that will be logged, applied, and returned.</returns>
+    /// <remarks>Override this hook in subclasses to customize one step in the template method.</remarks>
+    protected virtual int AdjustDamage(int damage, Creature enemy)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(damage);
+        ArgumentNullException.ThrowIfNull(enemy);
+        return damage;
     }
 
     /// <summary>
